@@ -1,0 +1,13 @@
+# directories
+node_modules/
+database/
+scripts/
+build/
+logs/
+bin/
+
+# files
+tsconfig.tsbuildinfo
+package-lock.json
+jest.config.ts
+.env

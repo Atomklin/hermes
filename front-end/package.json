@@ -1,0 +1,21 @@
+{
+  "name": "website-front-end",
+  "type": "module",
+  "version": "0.0.1",
+  "author": "Atomklin",
+  "license": "MIT",
+  "scripts": {
+    "dev": "astro dev",
+    "prod": "astro build && node ./dist/server/entry.mjs",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/node": "^6.0.3",
+    "@astrojs/svelte": "^4.0.3",
+    "@astrojs/tailwind": "^5.0.2",
+    "astro": "^3.3.0",
+    "svelte": "^4.2.1",
+    "tailwindcss": "^3.3.3"
+  }
+}
