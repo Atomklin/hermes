@@ -4,6 +4,14 @@ A website hosted with ExpressJS written in Astro and svelte with the intention o
 # Under Development
 This project is strictly under development, with most of its core functionality still missing.
 
+## Road Map
+- [ ] User Login and Authentication
+- [ ] Admin Logi Order management
+- [ ] Multi-language Support
+- [ ] `fir` implementation
+- [ ] `hermes` implementation
+- [ ] CSV import and exports
+
 ## Installation and Running
 Prerequisites
 - Node.JS `version >= 18.18.2 `
