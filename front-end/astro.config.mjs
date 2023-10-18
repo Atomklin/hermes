@@ -9,6 +9,6 @@ export default defineConfig({
   integrations: [tailwind(), svelte()],
   output: "server",
   adapter: node({
-    mode: "standalone"
+    mode: "middleware"
   })
 });

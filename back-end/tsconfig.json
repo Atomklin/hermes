@@ -2,18 +2,18 @@
   "compilerOptions": {
     "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node",
+    "moduleResolution": "NodeNext",
     "esModuleInterop": true,
     "removeComments": true,
     "skipLibCheck": true,
     "outDir": "./dist",
     "target": "ES2021",
-    "module": "CommonJS",
+    "module": "NodeNext",
     "rootDir": "./src",
     "sourceMap": true,
     "lib": ["ES2021"],
     "strict": true,
     "types": ["@types/node"]
   },
-  "exclude": ["./test"]
+  "exclude": ["./test", "./node_modules"]
 }

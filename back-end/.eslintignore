@@ -2,7 +2,7 @@
 node_modules/
 database/
 scripts/
-build/
+dist/
 logs/
 bin/
 

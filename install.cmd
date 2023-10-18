@@ -1,14 +1,13 @@
-@echo off
+@ECHO off
 
 @REM Install Front-end stuff
-cd front-end
+CD .\front-end
 npm install
-cd ..
 
 @REM Install Back-end stuff
-cd back-end
+CD ..\back-end
 npm install
-cd ..
+CD ..
 
-echo "npm install completed for both front-end and back-end."
-pause
+ECHO "npm install completed for both front-end and back-end."
+PAUSE

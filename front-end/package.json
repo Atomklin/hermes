@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "astro dev",
-    "prod": "astro build && node ./dist/server/entry.mjs",
+    "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
