@@ -24,9 +24,9 @@ export class GlobalData {
 
     this.isProduction = process.env["NODE_ENV"] != "development";
     this.port = parseInt(process.env["PORT"]!);
-    this.hostname = this.isProduction && process.env["HOSTNAME"] != null 
-      ? process.env["HOSTNAME"] 
-      : "127.0.0.1";      
+    this.hostname = this.isProduction && process.env["HOSTNAME"] != null
+      ? process.env["HOSTNAME"]
+      : "127.0.0.1";
 
     if (this.port == null || this.hostname == null)
       throw Error("Missing server environment variables");

@@ -7,25 +7,34 @@ import { globals } from "./Data/GlobalData.js";
 const app = express();
 
 // Initialization function
-void async function() {
+void (async function () {
   if (globals.isProduction) {
     const publicDir = join(globals.frontEndDir, "client");
     const entryFilePath = join(globals.frontEndDir, "server", "entry.mjs");
-    const { handler: ssrHandler } = await import(pathToFileURL(entryFilePath).toString());
+    const { handler: ssrHandler } = await import(
+      pathToFileURL(entryFilePath).toString()
+    );
 
     app.use("/", express.static(publicDir));
-    app.use(ssrHandler);  
+    app.use(ssrHandler);
   }
-  
+
 
   await globals.loadDatabase();
-  
-  
-  // Redirect users to /404 if the asked page is missing.
-  app.all("*", (_, res) => {
-    res.redirect("/404"); 
-  });
-  
+
+
+  if (globals.isProduction) {
+    // Handle error, so stack traces don't leak out to user
+    app.use((_e: any, _r: any, res: express.Response) => {
+      res.status(500);
+    });
+
+    // Redirect users to /404 if the asked page is missing.
+    app.all("*", (_, res) => {
+      res.redirect("/404");
+    });
+  }
+
 
   const hostname = globals.hostname;
   const port = globals.port;
@@ -33,4 +42,4 @@ void async function() {
   app.listen(port, hostname, () => {
     console.log("Listening to http://" + hostname + ":" + port);
   });
-}();
+})();
