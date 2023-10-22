@@ -4,12 +4,17 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Sequelize } from "sequelize";
 
+import { generateSaltAndHash } from "./passport.js";
+import { prepareSequelize } from "./sequelize.js";
+
 export class GlobalData {
   private _sequelize?: Sequelize;
 
   public readonly isProduction;
   public readonly hostname;
   public readonly port;
+
+  public readonly sessionSecret;
 
   /** Base directory containing both front-end code and back-end code */
   public readonly baseDir;
@@ -22,35 +27,58 @@ export class GlobalData {
 
     config({ path: join(this.baseDir, ".env") });
 
-    this.isProduction = process.env["NODE_ENV"] != "development";
     this.port = parseInt(process.env["PORT"]!);
+    this.sessionSecret = process.env["SESSION_SECRET"]!;
+    this.isProduction = process.env["NODE_ENV"] != "development";
     this.hostname = this.isProduction && process.env["HOSTNAME"] != null
       ? process.env["HOSTNAME"]
       : "127.0.0.1";
+      
 
-    if (this.port == null || this.hostname == null)
+    if (this.isProduction && 
+      process.env["NODE_ENV"] != "production")
+      process.env["NODE_ENV"] = "production";
+
+    if (this.port == null || 
+        this.hostname == null || 
+        this.sessionSecret == null)
       throw Error("Missing server environment variables");
 
-    if (this.isProduction && !existsSync(this.frontEndDir))
+    if (this.isProduction && 
+       !existsSync(this.frontEndDir))
       throw Error("Compiled front-end code missing");
   }
 
-  public async loadDatabase() {
-    const username = process.env["DB_USERNAME"];
-    const password = process.env["DB_PASSWORD"];
-    const host = process.env["DB_HOSTNAME"];
-    const name = process.env["DB_NAME"];
+  public get sequelize() {
+    if (this._sequelize == null)
+      throw Error("Database not initialized yet");
+    return this._sequelize;
+  }
 
-    if (!name || !username || !password)
+  public async loadDatabase() {
+    const dbUsername = process.env["DB_USERNAME"];
+    const dbPassword = process.env["DB_PASSWORD"];
+    const dbHostname = process.env["DB_HOSTNAME"];
+    const dbName = process.env["DB_NAME"];
+
+    if (!dbName || !dbUsername || !dbPassword)
       throw Error("Missing database environment variables");
 
-    const sequelize = new Sequelize(name, username, password, {
-      dialectOptions: { host },
-      dialect: "mysql"
-    });
+    this._sequelize = await prepareSequelize(
+      dbName, dbUsername, dbPassword, dbHostname);
 
-    await sequelize.authenticate();
-    this._sequelize = sequelize;
+    const adminUsername = process.env["ADMIN_USERNAME"];
+    const adminPassword = process.env["ADMIN_PASSWORD"];
+
+    if (!adminUsername || !adminPassword)
+      throw Error("Missing admin account environment variables");
+
+    const [salt, hash] = generateSaltAndHash(adminPassword);
+    await this._sequelize.models.users.upsert({
+      username: adminUsername,
+      hash, salt,
+      id: 1
+    });
   }
 }
 
