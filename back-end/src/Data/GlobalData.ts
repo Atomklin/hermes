@@ -4,17 +4,16 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Sequelize } from "sequelize";
 
+import { UserRoles } from "./Base/models.js";
 import { generateSaltAndHash } from "./passport.js";
 import { prepareSequelize } from "./sequelize.js";
 
 export class GlobalData {
   private _sequelize?: Sequelize;
 
-  public readonly isProduction;
-  public readonly hostname;
   public readonly port;
-
-  public readonly sessionSecret;
+  public readonly hostname;
+  public readonly isProduction;
 
   /** Base directory containing both front-end code and back-end code */
   public readonly baseDir;
@@ -28,12 +27,10 @@ export class GlobalData {
     config({ path: join(this.baseDir, ".env") });
 
     this.port = parseInt(process.env["PORT"]!);
-    this.sessionSecret = process.env["SESSION_SECRET"]!;
     this.isProduction = process.env["NODE_ENV"] != "development";
     this.hostname = this.isProduction && process.env["HOSTNAME"] != null
       ? process.env["HOSTNAME"]
       : "127.0.0.1";
-      
 
     if (this.isProduction && 
       process.env["NODE_ENV"] != "production")
@@ -41,7 +38,9 @@ export class GlobalData {
 
     if (this.port == null || 
         this.hostname == null || 
-        this.sessionSecret == null)
+        typeof process.env["RL_WINDOW_MS"] !== "string" ||
+        typeof process.env["SESSION_SECRET"] !== "string" ||
+        typeof process.env["RL_MAX_CONNECTIONS"] !== "string" )
       throw Error("Missing server environment variables");
 
     if (this.isProduction && 
@@ -75,6 +74,7 @@ export class GlobalData {
 
     const [salt, hash] = generateSaltAndHash(adminPassword);
     await this._sequelize.models.users.upsert({
+      permissions: UserRoles.CoalitionHighCommand,
       username: adminUsername,
       hash, salt,
       id: 1

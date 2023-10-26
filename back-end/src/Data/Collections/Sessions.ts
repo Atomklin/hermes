@@ -1,18 +1,26 @@
 import { SessionData, Store } from "express-session";
-import { Model, ModelStatic, Op, Optional, Sequelize } from "sequelize";
+import { Op, Sequelize } from "sequelize";
 
-/** 1 Day */
-export const MAX_AGE = 8.64e7;
+import { StaticSessionModel } from "../Base/models.js";
+
+/** 2 Hours */
+export const MAX_AGE = 7.2e6;
 
 // My very basic implementation of a Sequelize session storage
 export class SessionStorage extends Store {
   private readonly _model: StaticSessionModel;
-  private _collector?: NodeJS.Timeout;
+  private readonly _interval: NodeJS.Timeout;
 
-  constructor(private readonly _sequelize: Sequelize) {
+  constructor(sequelize: Sequelize) {
     super({ captureRejections: true });
-    this._model = this._sequelize.models.sessions;
-    this._startCollector();
+    this._model = sequelize.models.sessions;
+    
+    this._interval = setInterval(
+      this._removeExpiredSessions.bind(this),
+      MAX_AGE / 2
+    );
+
+    this._interval.unref();
   }
 
   public get(sid: string, callback: (err: any, session?: SessionData) => void) {
@@ -85,21 +93,6 @@ export class SessionStorage extends Store {
       });
     }, callback);
   }
-
-  private _startCollector() {
-    this._stopCollector();
-    this._collector = setInterval(
-      this._removeExpiredSessions.bind(this),
-      MAX_AGE / 2
-    );
-
-    this._collector.unref();
-  }
-
-  private _stopCollector() {
-    clearInterval(this._collector);
-    this._collector = undefined;
-  }
 }
 
 function defaultCallback(err: any) {
@@ -115,12 +108,3 @@ function handleAsyncFunc<T>(
     .catch(() => callback(undefined, undefined));
 }
 
-export interface SessionAttributes {
-  sid: string;
-  expires: Date,
-  data: string
-}
-
-export type SessionCreationAttributes = Optional<SessionAttributes, "sid">;
-export type SessionModel = Model<SessionAttributes, SessionCreationAttributes>;
-export type StaticSessionModel = ModelStatic<SessionModel>;

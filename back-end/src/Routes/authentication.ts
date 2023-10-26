@@ -1,10 +1,12 @@
 import { Router } from "express";
 import passport from "passport";
 
+import { ensureBasicAuth } from "../All-Purpose/middlewares.js";
+import { UserModel } from "../Data/Base/models.js";
 import { globals } from "../Data/GlobalData.js";
-import { generateSaltAndHash, UserModel } from "../Data/passport.js";
+import { generateSaltAndHash } from "../Data/passport.js";
 
-export const router = Router();
+const router = Router();
 
 router.post("/login", passport.authenticate("local"), (req, res) => {
   const status = req.isAuthenticated() ? 200 : 401;
@@ -36,6 +38,16 @@ router.post("/logout", (req, res) => {
     err != null 
       ? res.sendStatus(500)
       : res.redirect("/" + language + "/login");
+  });
+});
+
+
+router.get("/userinfo", ensureBasicAuth, (req, res) => {
+  const model = (req.user as UserModel);
+  res.json({
+    permissions: model.getDataValue("permissions"),
+    language: model.getDataValue("language"),
+    username: model.getDataValue("username")
   });
 });
 

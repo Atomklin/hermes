@@ -2,7 +2,9 @@ import { Application } from "express";
 import { pbkdf2Sync, randomBytes } from "node:crypto";
 import passport from "passport";
 import { Strategy } from "passport-local";
-import { Model, ModelStatic, Sequelize } from "sequelize";
+import { Sequelize } from "sequelize";
+
+import { StaticUserModel } from "./Base/models.js";
 
 // This entirety was quite difficult to setup, as passport-js 
 // lacked any detailed documentation on how and when to use certain methods.
@@ -17,7 +19,6 @@ export function preparePassport(app: Application, sequelize: Sequelize) {
 
   const model = sequelize.models.users as StaticUserModel;
   passport.use(new Strategy((username, password, done) => {
-    console.log(username, password);
     model.findOne({ where: { username }})
       .catch(() => void done(undefined, false))
       .then((user) => {
@@ -63,16 +64,3 @@ export function generateSaltAndHash(password: string) {
   const hash = pbkdf2Sync(password, salt, 10000, 64, "sha512").toString("hex");
   return [salt, hash] as const;
 }
-
-
-
-export interface UserAttributes {
-  id: number;
-  username: string;
-  hash: string;
-  salt: string;
-  language: string;
-}
-
-export type UserModel = Model<UserAttributes>;
-export type StaticUserModel = ModelStatic<UserModel>;
