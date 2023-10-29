@@ -1,29 +1,30 @@
-# Foxhole Logi Website
-A website hosted with ExpressJS written in Astro and svelte with the intention of making logistics tracking easier.
+# Hermes
+A SPA utilizing Svelte and Express.JS, with the single purpose of making cross-regiment logi-management easier.
 
 # Under Development
 This project is strictly under development, with most of its core functionality still missing.
 
 ## Road Map
-- [ ] Admin Logi Order management
+- [ ] Discord Auth
 - [ ] Multi-language Support
 - [ ] `fir` implementation
-- [ ] `hermes` implementation
 - [ ] CSV import and exports
+- [ ] User management
 
 ## Installation and Running
 Prerequisites
 - Node.JS `version >= 18.18.2 `
+- MariaDB
 
 Running
 1. Setup a `.env` file using `.env.sample` as a template
 2. Install all the dependencies
 ```cmd
-cmd ./install.cmd
+cmd ./scripts/install.cmd
 ```
 3. Run using the production script
 ```cmd
-cmd ./run-prod.cmd
+cmd ./scripts/run-prod.cmd
 ```
 
 ## License 

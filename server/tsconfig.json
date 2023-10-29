@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "removeComments": true,
+    "skipLibCheck": true,
+    "outDir": "./dist",
+    "target": "ES2021",
+    "module": "CommonJS",
+    "rootDir": "./src",
+    "sourceMap": true,
+    "lib": ["ES2021"],
+    "strict": true,
+    "types": ["@types/node"]
+  },
+  "exclude": ["./test", "./node_modules"]
+}
