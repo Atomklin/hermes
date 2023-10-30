@@ -18,10 +18,10 @@ export function preparePassport(app: Application, sequelize: Sequelize) {
 
   const model = sequelize.models.users as StaticUserModel;
 
-  const clientID = process.env["DISCORD_CLIENT_ID"];
   const clientSecret = process.env["DISCORD_CLIENT_SECRET"];
   const callbackURL = process.env["DISCORD_CALLBACK_URL"];
-  const scope = ["identity", "guilds"];
+  const clientID = process.env["DISCORD_CLIENT_ID"];
+  const scope = ["identify", "guilds"];
 
   if (!clientID || !clientSecret || !callbackURL)
     throw Error("Missing Discord Auth ENV");
@@ -30,7 +30,7 @@ export function preparePassport(app: Application, sequelize: Sequelize) {
     clientSecret,
     callbackURL,
     clientID,
-    scope,
+    scope
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   }, (_a, _r, profile, done) => {
     model.findOrCreate({
@@ -38,22 +38,22 @@ export function preparePassport(app: Application, sequelize: Sequelize) {
       defaults: { 
         permissions: UserRoles.ReadOnly,
         username: profile.username,
-        language: "en",
+        language: "en"
       }
-    }).catch(() => void done(undefined, false))
-      .then((user) => void done(undefined, user ? user : false));
+    }).catch(() => void done(undefined, undefined))
+      .then((result) => {void done(undefined, result ? result[0] : undefined);});
   }));
 
   // user is from the verify function above
   // Convert UserModel into a simpler id that is stored in passport
-  passport.serializeUser((user: any, done) => {
-    done(undefined, user.getDataValue("id"));
+  passport.serializeUser((users: any, done) => {
+    done(undefined, users.getDataValue("id"));
   });
 
   // Convert the simple id from above to a UserModel which will be stored in `req.user`
   passport.deserializeUser((id: any, done) => {
     model.findByPk(id)
-      .catch(() => void done(undefined, false))
+      .catch(() => void done(undefined, undefined))
       .then((user) => void done(undefined, user));
   });
 }

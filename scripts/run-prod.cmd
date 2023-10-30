@@ -2,7 +2,7 @@
 
 @REM Build client into a modularized & minified JS code
 CD .\client
-CALL npm run Build
+CALL npm run build
 
 @REM Run server
 CD ..\server

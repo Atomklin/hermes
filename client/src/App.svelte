@@ -1,11 +1,9 @@
 <script lang="ts">
+  import Auth from "./lib/dashboard/Auth.svelte";
 </script>
 
 <main>
+  <Auth>
+    
+  </Auth>
 </main>
-
-<style global>
-  @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
-</style>

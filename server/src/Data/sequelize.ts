@@ -15,7 +15,10 @@ export async function prepareSequelize(name: string, username: string, password:
   ///////////////////////////////////////////////////////////////////////////////////////
 
   sequelize.define("regiments", {
-    id: DataTypes.BIGINT,
+    id: {
+      type: DataTypes.BIGINT,
+      primaryKey: true
+    },
     name: DataTypes.STRING,
     icon: {
       type: DataTypes.TEXT,
@@ -24,7 +27,10 @@ export async function prepareSequelize(name: string, username: string, password:
   });
 
   sequelize.define("users", {
-    id: DataTypes.INTEGER,
+    id: {
+      type: DataTypes.BIGINT,
+      primaryKey: true
+    },
     username: {
       type: DataTypes.STRING(127),
       unique: true

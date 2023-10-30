@@ -3,10 +3,11 @@ import { join } from "node:path";
 
 import { ensureBasicAuth } from "./All-Purpose/middlewares";
 import { globals } from "./Data/GlobalData";
+import authentication from "./Routes/authentication";
 import regiments from "./Routes/regiments";
 
 export async function prepareRoutes(app: express.Application) {
-  // app.use("/auth", authentication);
+  app.use("/api/auth", authentication);
   app.use("/api/regiments", ensureBasicAuth, regiments);
 
   if (globals.isProduction) {

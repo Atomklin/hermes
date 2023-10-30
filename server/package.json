@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "main": "dist/main.js",
   "scripts": {
-    "prod": "tsc && node ."
+    "prod": "node .",
+    "dev": "tsc && node ."
   },
   "author": "Atomklin",
   "license": "MIT",
