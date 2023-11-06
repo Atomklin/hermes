@@ -27,7 +27,7 @@ void (async function () {
   app.use(express.urlencoded({ extended: false }));
   app.use(session({
     store: new SessionStorage(globals.sequelize),
-    secret: process.env["SESSION_SECRET"]!,
+    secret: process.env["SESSION_SECRET"]!.split(","),
     saveUninitialized: false,
     name: "sessionId",
     resave: false,

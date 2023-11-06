@@ -25,7 +25,8 @@ export async function prepareRoutes(app: express.Application) {
 
     // Redirect users to /404 if the asked page is missing.
     app.all("*", (_, res) => {
-      res.redirect("/404");
+      res.status(404);
+      res.sendFile(join(globals.clientDir, "404.html"));
     });
   }
 }
