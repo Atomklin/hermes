@@ -1,13 +1,11 @@
 import { config } from "dotenv";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { Sequelize } from "sequelize";
 
-import { UserRoles } from "./Base/models.js";
-import { prepareSequelize } from "./sequelize.js";
+import { SequelizeInstance, setupSequelize } from "./models/setup";
 
 export class GlobalData {
-  private _sequelize?: Sequelize;
+  private _sequelize?: SequelizeInstance;
 
   public readonly port;
   public readonly hostname;
@@ -61,22 +59,8 @@ export class GlobalData {
     if (!dbName || !dbUsername || !dbPassword)
       throw Error("Missing Database ENV");
 
-    this._sequelize = await prepareSequelize(
+    this._sequelize = await setupSequelize(
       dbName, dbUsername, dbPassword, dbHostname);
-  }
-
-  public async prepareAdminAccess() {
-    const adminUsername = process.env["ADMIN_USERNAME"];
-    const adminId = process.env["ADMIN_ID"];
-
-    if (!adminUsername || !adminId)
-      throw Error("Missing Server Admin ENV");
-
-    await this.sequelize.models.users.upsert({
-      permissions: UserRoles.CoalitionHighCommand,
-      username: adminUsername,
-      id: adminId
-    });
   }
 }
 

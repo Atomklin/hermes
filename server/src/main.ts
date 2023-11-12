@@ -4,9 +4,9 @@ import rateLimit from "express-rate-limit";
 import session from "express-session";
 import helmet from "helmet";
 
-import { MAX_AGE, SessionStorage } from "./Data/Collections/Sessions";
-import { globals } from "./Data/GlobalData";
-import { preparePassport } from "./Data/passport";
+import { globals } from "./data/GlobalData";
+import { MAX_AGE, SessionStorage } from "./data/models/sessions";
+import { setupPassport } from "./data/models/setup";
 import { prepareRoutes } from "./routes";
 
 const app = express();
@@ -14,7 +14,6 @@ const app = express();
 // Initialization function
 void (async function () {
   await globals.loadDatabase();
-  await globals.prepareAdminAccess();
 
   app.use(helmet());
   app.use(rateLimit({
@@ -26,7 +25,7 @@ void (async function () {
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(session({
-    store: new SessionStorage(globals.sequelize),
+    store: new SessionStorage(globals.sequelize.models.sessions),
     secret: process.env["SESSION_SECRET"]!.split(","),
     saveUninitialized: false,
     name: "sessionId",
@@ -37,7 +36,7 @@ void (async function () {
     } 
   }));
 
-  preparePassport(app, globals.sequelize);
+  setupPassport(app, globals.sequelize);
   await prepareRoutes(app);
 
   const hostname = globals.hostname;

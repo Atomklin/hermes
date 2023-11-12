@@ -1,13 +1,16 @@
 <script lang="ts">
-  import { _ } from "svelte-i18n";
+  import { _, locale } from "svelte-i18n";
 
   import FullSizeLogo from "../../../assets/images/full-logo.png";
   import Button from "../../components/forms/Button.svelte";
   import Modal from "../../components/Modal.svelte";
 
   let showModal = false;
+  
+  if ($locale == null)
+    locale.set("en");
 
-  function redirectToAuth() {
+  function redirectToLogin() {
     window.location.pathname = "/api/auth/login";
   }
 </script>
@@ -23,7 +26,7 @@
     {$_("login.description")}
   </p>
   <div class="w-48 mx-auto md:mt-10 flex flex-col gap-3">
-    <Button theme="Success" on:click={redirectToAuth}>
+    <Button theme="Success" on:click={redirectToLogin}>
       <p class="px-2 pt-1 font-bold uppercase">
         {$_("login.auth-button")}
       </p>

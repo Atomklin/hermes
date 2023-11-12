@@ -1,5 +1,5 @@
 <div tabindex="-1" class="fixed top-0 left-0 right-0 w-full">
-  <div class="flex items-center justify-center  min-h-screen">
+  <div class="flex flex-col items-center justify-center  min-h-screen">
     <div class="fixed z-40 inset-0 transition-opacity bg-black opacity-75" 
       aria-hidden="true" />
     <slot name="top" />

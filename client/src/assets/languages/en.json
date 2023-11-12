@@ -2,7 +2,7 @@
   "login": {
     "title": "Hermes",
     "description": "Regiment Logi Tracking and Management Simplified",
-    "auth-button": "Sign in",
+    "auth-button": "Log in",
     "about": {
       "details": "A free and open source passion project containing various tools, designed to make the management of stockpiles easier to understand and integrate with existing regiments.",
       "button": "More Info",
@@ -16,5 +16,13 @@
         "2": "Cookies - User token is stored in your cookies to keep you logged into the website"
       }
     }
+  },
+  "regiments": {
+    "title": "Select a Regiment :",
+    "empty": "Couldn't find any available regiments for you.."
+  },
+  "user-options": {
+    "title": "User",
+    "logout": "Logout"
   }
 }

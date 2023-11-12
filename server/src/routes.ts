@@ -1,13 +1,15 @@
 import express from "express";
 import { join } from "node:path";
 
-import { ensureBasicAuth } from "./All-Purpose/middlewares";
-import { globals } from "./Data/GlobalData";
-import authentication from "./Routes/authentication";
-import regiments from "./Routes/regiments";
+import { ensureBasicAuth } from "./all-purpose/middlewares";
+import { globals } from "./data/GlobalData";
+import authentication from "./routes/authentication";
+import regiments from "./routes/regiments";
+import users from "./routes/users";
 
 export async function prepareRoutes(app: express.Application) {
   app.use("/api/auth", authentication);
+  app.use("/api/users", ensureBasicAuth, users);
   app.use("/api/regiments", ensureBasicAuth, regiments);
 
   if (globals.isProduction) {

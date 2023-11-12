@@ -1,9 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
 
-import { ensureBasicAuth } from "../All-Purpose/middlewares";
-import { UserModel } from "../Data/Base/models";
-
 const router = Router();
 
 router.get("/login", passport.authenticate("discord", { 
@@ -29,16 +26,6 @@ router.post("/logout", (req, res) => {
     err != null 
       ? res.sendStatus(500)
       : res.redirect("/");
-  });
-});
-
-
-router.get("/userinfo", ensureBasicAuth, (req, res) => {
-  const model = (req.user as UserModel);
-  res.json({
-    permissions: model.getDataValue("permissions"),
-    language: model.getDataValue("language"),
-    username: model.getDataValue("username")
   });
 });
 
