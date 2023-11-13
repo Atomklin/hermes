@@ -3,7 +3,7 @@
   import Loading from "../../components/Loading.svelte";
 </script>
 
-<div>
+<div class="w-full">
   {#await getUserInfo()}
     <Loading>
       <h1 slot="bottom" class="text-white z-50 mt-5">

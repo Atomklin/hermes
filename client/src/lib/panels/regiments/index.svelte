@@ -7,11 +7,11 @@
   import Regiment from "./Regiment.svelte";
 </script>
 
-<div class="flex w-72 md:w-1/3 mx-auto flex-col justify-center text-center">
+<div class="flex w-96 mx-auto flex-col justify-center items-center gap-3">
   {#await getRegiments()}
     <Loading />
   {:then} 
-    <h1 class="text-3xl font-black mt-8">
+    <h1 class="text-2xl md:text-xl font-black mt-8 mb-3">
       {$_("regiments.title")}
     </h1>
     {#if $regiments != null}
@@ -19,9 +19,7 @@
         <Regiment {regiment} /> 
       {/each}
     {:else}
-      <div class="mt-3">
-        {$_("regiments.empty")}
-      </div>
+      {$_("regiments.empty")}
     {/if}
   {/await}
 </div>

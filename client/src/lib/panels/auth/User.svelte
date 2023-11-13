@@ -3,40 +3,36 @@
 
   import { getUserAvatarURL } from "../../api/discord";
   import { logout, user } from "../../api/users";
-
-  import Modal from "../../components/Modal.svelte";
-  import Button from "../../components/forms/Button.svelte";
-
-  let showModal = false;
 </script>
 
 {#if $user != null}
-  <button class="bg-zinc-800 rounded-md p-2 flex flex-row gap-2 justify-center items-center"
-    on:click={() => { showModal = true }}>
+  <div class="relative cursor-pointer bg-zinc-800 hover:bg-zinc-700 rounded-md h-fit flex flex-row gap-2 justify-center items-center"
+    id="user-button">
     {#if $user.icon}
-      <img class="h-8 rounded-xl"
+      <img class="object-cover rounded-l-lg h-8"
         src={getUserAvatarURL($user.id, $user.icon)}
         alt="user-avatar">
     {/if}
-    <h1 class="text-white text-lg font-bold">
+    <h1 class="text-lg font-bold">
       {$user.username}
     </h1>
-  </button>
+    <svg class="w-3 h-3 rotate-180 shrink-0 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+    </svg>
+    <div class="hidden z-10 bg-zinc-600 absolute w-full translate-y-9 shadow-xl rounded-b-md flex-col justify-center pb-2"
+      id="dropdown">
+      <!-- Add Language Select -->
+      <button class="h-8 w-full hover:bg-zinc-500 font-bold" on:click={logout}>
+        {$_("user-options.logout")}
+      </button>
+    </div>
+  </div>
 {/if}
 
-{#if showModal}
-  <Modal on:escape={() => { showModal = false }}
-      class="shadow-xl px-4 py-5 w-fit">
-    <div class="w-56">
-      <div class="flex flex-row justify-between mb-4 w-full">
-        <h2 class="font-bold text-xl">{$_("user-options.title")}</h2>
-        <button class="font-bold" on:click={() => { showModal = false }}>
-          X
-        </button>
-      </div>
-      <Button theme="Danger" on:click={logout}>
-        {$_("user-options.logout")}
-      </Button>
-    </div>
-  </Modal>
-{/if}
+<style>
+  #dropdown:focus-within,
+  #dropdown:hover,
+  #user-button:hover > #dropdown {
+    display: block;
+  }
+</style>

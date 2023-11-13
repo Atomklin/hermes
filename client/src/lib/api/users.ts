@@ -1,5 +1,5 @@
 import { locale } from "svelte-i18n";
-import { writable } from "svelte/store";
+import { get, writable } from "svelte/store";
 
 import { axiosInstance } from "../all-purpose/misc";
 import { regiments, selectedRegiment } from "./regiments";
@@ -7,6 +7,9 @@ import { regiments, selectedRegiment } from "./regiments";
 export const user = writable<UserInfo | undefined>();
 
 export async function getUserInfo() {
+  if (get(user) != null)
+    return;
+  
   const { data } = await axiosInstance.get("/api/users/me");
   locale.set(data.language);
   user.set(data);

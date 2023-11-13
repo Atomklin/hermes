@@ -87,8 +87,6 @@ export async function findOrCreateUser(profile: Strategy.Profile, sequelize: Seq
     }
   });
 
-  console.log(profile);
-
   if (profile.guilds) {
     for (const guild of profile.guilds) {
       const regiment = await regiments.findByPk(guild.id);

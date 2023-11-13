@@ -22,7 +22,6 @@
     "empty": "Couldn't find any available regiments for you.."
   },
   "user-options": {
-    "title": "User",
     "logout": "Logout"
   }
 }
